@@ -35,16 +35,22 @@ function renderHero(banners) {
   dotsWrap.innerHTML = "";
 
   banners.forEach((b, i) => {
+    const hasText = !!(b.title || b.subtitle);
     track.appendChild(
       el(`
         <div class="hero-slide" style="background-image:url('${b.image}')">
-          <div class="hero-slide__scrim"></div>
-          <div class="hero-slide__content">
-            <p class="eyebrow">Emuná</p>
-            <h1>${b.title}</h1>
-            <p class="hero-slide__subtitle">${b.subtitle || ""}</p>
-            <a class="btn btn--gold" href="${b.ctaLink || "#"}">${b.ctaLabel || "Ver mais"}</a>
-          </div>
+          ${
+            hasText
+              ? `
+            <div class="hero-slide__scrim"></div>
+            <div class="hero-slide__content">
+              ${b.title ? `<h1>${b.title}</h1>` : ""}
+              ${b.subtitle ? `<p class="hero-slide__subtitle">${b.subtitle}</p>` : ""}
+              ${b.ctaLabel ? `<a class="btn btn--gold" href="${b.ctaLink || "#"}">${b.ctaLabel}</a>` : ""}
+            </div>
+          `
+              : ""
+          }
         </div>
       `)
     );
