@@ -645,6 +645,12 @@ ul { list-style: none; }
 }
 .newsletter-msg { margin-top: 14px; font-size: 14px; color: var(--gold-soft); min-height: 20px; }
 
+@media (max-width: 480px) {
+  .newsletter { padding: 36px 20px; }
+  .newsletter-form input { min-width: 0; flex-basis: 100%; }
+  .newsletter-form button { flex-basis: 100%; }
+}
+
 /* ============================================================
    Footer
    ============================================================ */
