@@ -173,10 +173,12 @@ function initSlideover() {
     $("#tf-date").value = new Date().toISOString().slice(0, 10);
     backdrop.classList.add("is-open");
     panel.classList.add("is-open");
+    panel.setAttribute("aria-hidden", "false");
   };
   const close = () => {
     backdrop.classList.remove("is-open");
     panel.classList.remove("is-open");
+    panel.setAttribute("aria-hidden", "true");
   };
 
   $("#new-transaction-btn").addEventListener("click", open);
