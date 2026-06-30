@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Minha conta — Emuná</title>
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#6F3CC3" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<link rel="stylesheet" href="css/account.css" />
+</head>
+<body class="is-loaded">
+
+<div id="header-placeholder"></div>
+
+<main>
+  <section class="section section--tight">
+    <div class="container">
+
+      <!-- Estado: deslogado -->
+      <div id="auth-gate" class="auth-gate">
+        <div class="auth-card">
+          <div class="auth-tabs">
+            <button class="auth-tab is-active" data-tab="login">Entrar</button>
+            <button class="auth-tab" data-tab="register">Criar conta</button>
+          </div>
+
+          <form id="login-form" class="auth-form">
+            <label class="field">E-mail
+              <input type="email" id="login-email" required />
+            </label>
+            <label class="field">Senha
+              <input type="password" id="login-password" required />
+            </label>
+            <p class="auth-error" id="login-error"></p>
+            <button type="submit" class="btn btn--primary btn--full">Entrar</button>
+          </form>
+
+          <form id="register-form" class="auth-form" hidden>
+            <label class="field">Nome completo
+              <input type="text" id="register-name" required />
+            </label>
+            <label class="field">E-mail
+              <input type="email" id="register-email" required />
+            </label>
+            <label class="field">Telefone
+              <input type="tel" id="register-phone" />
+            </label>
+            <label class="field">Senha
+              <input type="password" id="register-password" required minlength="6" />
+            </label>
+            <p class="auth-error" id="register-error"></p>
+            <button type="submit" class="btn btn--primary btn--full">Criar minha conta</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Estado: logado -->
+      <div id="account-dashboard" class="account-dashboard" hidden>
+        <div class="section-heading">
+          <p class="eyebrow">Minha conta</p>
+          <h2 id="account-greeting">Olá!</h2>
+        </div>
+
+        <div class="account-tabs">
+          <button class="account-tab is-active" data-panel="dados">Meus dados</button>
+          <button class="account-tab" data-panel="enderecos">Endereços</button>
+          <button class="account-tab" data-panel="pedidos">Meus pedidos</button>
+          <button class="account-tab" id="logout-tab">Sair</button>
+        </div>
+
+        <div class="account-panel is-active" id="panel-dados">
+          <form id="profile-form" class="account-form">
+            <label class="field">Nome completo
+              <input type="text" id="profile-name" required />
+            </label>
+            <label class="field">E-mail
+              <input type="email" id="profile-email" disabled />
+            </label>
+            <label class="field">Telefone
+              <input type="tel" id="profile-phone" />
+            </label>
+            <button type="submit" class="btn btn--primary">Salvar dados</button>
+            <p class="account-msg" id="profile-msg"></p>
+          </form>
+        </div>
+
+        <div class="account-panel" id="panel-enderecos">
+          <div id="address-list" class="address-list"></div>
+          <form id="address-form" class="account-form">
+            <h4>Adicionar endereço</h4>
+            <div class="field-grid">
+              <label class="field">CEP<input type="text" id="addr-cep" required /></label>
+              <label class="field">Cidade<input type="text" id="addr-city" required /></label>
+              <label class="field">Estado<input type="text" id="addr-state" maxlength="2" required /></label>
+              <label class="field field--wide">Endereço<input type="text" id="addr-street" required /></label>
+              <label class="field">Número<input type="text" id="addr-number" required /></label>
+              <label class="field">Complemento<input type="text" id="addr-complement" /></label>
+            </div>
+            <button type="submit" class="btn btn--ghost">+ Adicionar endereço</button>
+          </form>
+        </div>
+
+        <div class="account-panel" id="panel-pedidos">
+          <div id="orders-list" class="orders-list"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+
+<script type="module" src="js/account.js"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Relatórios — Painel Emuná</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+<div class="admin-shell">
+  <div id="sidebar-placeholder"></div>
+
+  <main class="admin-main">
+    <div class="panel">
+      <div class="panel__header">
+        <h2>Relatórios</h2>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn--ghost btn--sm" id="export-current-csv">Exportar Excel (CSV)</button>
+          <button class="btn btn--ghost btn--sm" id="export-current-pdf">Exportar PDF</button>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <select id="report-select">
+          <option value="produtos-vendidos">Produtos vendidos</option>
+          <option value="mais-vendidos">Produtos mais vendidos</option>
+          <option value="clientes">Clientes</option>
+          <option value="pedidos">Pedidos</option>
+          <option value="estoque">Estoque</option>
+          <option value="financeiro">Financeiro</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead id="report-head"></thead>
+          <tbody id="report-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script type="module" src="js/admin-reports.js"></script>
+</body>
+</html>

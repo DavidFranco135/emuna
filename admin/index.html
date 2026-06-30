@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard — Painel Emuná</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/admin.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="admin-shell">
+  <div id="sidebar-placeholder"></div>
+
+  <main class="admin-main">
+    <div class="stat-grid" id="stat-grid"></div>
+
+    <div class="charts-grid">
+      <div class="panel">
+        <div class="panel__header"><h2>Vendas dos últimos 14 dias</h2></div>
+        <canvas id="sales-chart" height="110"></canvas>
+      </div>
+      <div class="panel">
+        <div class="panel__header"><h2>Pedidos por status</h2></div>
+        <canvas id="status-chart" height="110"></canvas>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="panel">
+        <div class="panel__header">
+          <h2>Últimas vendas</h2>
+          <a class="btn btn--ghost btn--sm" href="pedidos.html">Ver todos</a>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Pedido</th><th>Cliente</th><th>Total</th><th>Status</th></tr></thead>
+            <tbody id="recent-orders-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel__header"><h2>Produtos mais vendidos</h2></div>
+        <div id="top-products-list"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script type="module" src="js/admin-dashboard.js"></script>
+</body>
+</html>

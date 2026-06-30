@@ -1,0 +1,116 @@
+.auth-gate {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0 40px;
+}
+.auth-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 32px;
+  width: 100%;
+  max-width: 420px;
+}
+.auth-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--gray-line);
+}
+.auth-tab {
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--gray-mid);
+  border-bottom: 2px solid transparent;
+}
+.auth-tab.is-active { color: var(--violet-deep); border-bottom-color: var(--violet); }
+
+.auth-form { display: flex; flex-direction: column; gap: 14px; }
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--gray-mid);
+  font-weight: 600;
+}
+.field input {
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-line);
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--charcoal);
+  font-weight: 400;
+}
+.auth-error { color: #C0392B; font-size: 13px; min-height: 16px; }
+
+.account-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--gray-line);
+  margin-bottom: 26px;
+}
+.account-tab {
+  padding: 11px 16px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--gray-mid);
+  border-bottom: 2px solid transparent;
+}
+.account-tab.is-active { color: var(--violet-deep); border-bottom-color: var(--violet); }
+#logout-tab { margin-left: auto; color: #C0392B; }
+
+.account-panel { display: none; max-width: 640px; }
+.account-panel.is-active { display: block; }
+
+.account-form { display: flex; flex-direction: column; gap: 14px; max-width: 420px; }
+.account-form h4 { font-family: var(--font-display); color: var(--violet-deep); margin: 10px 0 4px; }
+.account-msg { font-size: 13px; color: #2E7D4F; min-height: 16px; }
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.field-grid .field--wide { grid-column: 1 / -1; }
+
+.address-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+.address-card {
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+.address-card button { color: #C0392B; font-size: 13px; font-weight: 600; }
+
+.orders-list { display: flex; flex-direction: column; gap: 14px; }
+.order-card {
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  box-shadow: var(--shadow-card);
+}
+.order-card__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.order-card__header strong { color: var(--violet-deep); }
+.order-card__items { font-size: 13px; color: var(--gray-mid); }
+
+.acc-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.acc-badge--orange { background: #FBE9E1; color: #B9572E; }
+.acc-badge--violet { background: var(--lilac); color: var(--violet-deep); }
+.acc-badge--green { background: #E3F3E9; color: #2E7D4F; }
+.acc-badge--red { background: #FBE5E2; color: #C0392B; }

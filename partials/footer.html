@@ -1,0 +1,67 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <a href="index.html" class="logo">Emun<span style="color:var(--gold)">á</span></a>
+        <p>Crochê, bijuterias, canecas da Escola de Cura, livros e produtos digitais feitos com cuidado, do Brasil para você.</p>
+        <div class="footer-social">
+          <a href="#" data-instagram aria-label="Instagram">📷</a>
+          <a href="#" data-facebook aria-label="Facebook">📘</a>
+          <a href="#" data-whatsapp aria-label="WhatsApp">💬</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Institucional</h4>
+        <ul>
+          <li><a href="index.html#sobre">Sobre a loja</a></li>
+          <li><a href="politica-privacidade.html">Política de privacidade</a></li>
+          <li><a href="trocas.html">Trocas e devoluções</a></li>
+          <li><a href="termos.html">Termos de uso</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <ul>
+          <li><a href="#" data-email>contato@emuna.com.br</a></li>
+          <li><span data-phone-text>(21) 99999-9999</span></li>
+          <li><span data-address-text>Niterói, RJ</span></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Onde estamos</h4>
+        <div class="footer-map">
+          <iframe title="Mapa da loja" loading="lazy"
+            src="https://www.google.com/maps?q=Niter%C3%B3i,RJ&output=embed"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <span id="current-year"></span> Emuná. Todos os direitos reservados. · <span class="credit-line">Produzido por NIKLAUS<sup>®</sup></span> <span class="admin-trigger" id="admin-trigger" title=""></span></span>
+      <div class="legal-links">
+        <a href="politica-privacidade.html">Privacidade</a>
+        <a href="trocas.html">Trocas</a>
+        <a href="termos.html">Termos</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== ADMIN LOGIN MODAL (acesso discreto) ===================== -->
+<div class="admin-modal" id="admin-login-modal" aria-hidden="true">
+  <div class="admin-modal__panel">
+    <button class="admin-modal__close" id="admin-login-close" aria-label="Fechar">×</button>
+    <h3>Acesso administrativo</h3>
+    <form id="admin-login-form">
+      <label for="admin-email">E-mail</label>
+      <input type="email" id="admin-email" required autocomplete="username" />
+      <label for="admin-password">Senha</label>
+      <input type="password" id="admin-password" required autocomplete="current-password" />
+      <p class="admin-login-error" id="admin-login-error"></p>
+      <button type="submit" class="btn btn--primary">Entrar</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Produtos — Painel Emuná</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+<div class="admin-shell">
+  <div id="sidebar-placeholder"></div>
+
+  <main class="admin-main">
+    <div class="panel">
+      <div class="panel__header">
+        <h2>Produtos</h2>
+        <button class="btn btn--primary" id="new-product-btn">+ Novo produto</button>
+      </div>
+
+      <div class="filter-bar">
+        <input type="search" id="product-search" placeholder="Buscar por nome ou SKU…" />
+        <select id="product-category-filter"><option value="">Todas as categorias</option></select>
+        <select id="product-stock-filter">
+          <option value="">Todo o estoque</option>
+          <option value="low">Estoque baixo</option>
+          <option value="out">Sem estoque</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th></th><th>Produto</th><th>SKU</th><th>Categoria</th><th>Preço</th><th>Estoque</th><th>Status</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="products-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Slide-over: criar/editar produto -->
+<div class="admin-modal-backdrop" id="product-backdrop"></div>
+<div class="admin-slideover" id="product-slideover" aria-hidden="true">
+  <div class="admin-slideover__header">
+    <h2 id="product-form-title">Novo produto</h2>
+    <button class="admin-slideover__close" id="product-form-close" aria-label="Fechar">×</button>
+  </div>
+
+  <form id="product-form">
+    <input type="hidden" id="pf-id" />
+    <div class="form-grid">
+      <label class="field field--wide">Nome
+        <input type="text" id="pf-name" required />
+      </label>
+      <label class="field field--wide">Descrição curta
+        <input type="text" id="pf-short-desc" required />
+      </label>
+      <label class="field field--wide">Descrição longa
+        <textarea id="pf-description"></textarea>
+      </label>
+
+      <label class="field">Categoria
+        <select id="pf-category" required></select>
+      </label>
+      <label class="field">SKU
+        <input type="text" id="pf-sku" />
+      </label>
+
+      <label class="field">Preço (R$)
+        <input type="number" id="pf-price" step="0.01" min="0" required />
+      </label>
+      <label class="field">Preço promocional (R$)
+        <input type="number" id="pf-promo-price" step="0.01" min="0" />
+      </label>
+
+      <label class="field">Quantidade em estoque
+        <input type="number" id="pf-stock" min="0" required />
+      </label>
+      <label class="field">Peso (kg)
+        <input type="number" id="pf-weight" step="0.01" min="0" />
+      </label>
+
+      <label class="field field--wide">Dimensões
+        <input type="text" id="pf-dimensions" placeholder="ex: 30cm x 20cm x 10cm" />
+      </label>
+
+      <label class="field field--wide">Vídeo (URL de embed, opcional)
+        <input type="url" id="pf-video" placeholder="https://www.youtube.com/embed/…" />
+      </label>
+
+      <div class="field field--wide">
+        <span>Fotos do produto</span>
+        <div class="image-thumb-list" id="pf-images-list"></div>
+        <label class="btn btn--ghost btn--sm upload-label">
+          📷 Enviar fotos
+          <input type="file" id="pf-image-upload" accept="image/*" multiple hidden />
+        </label>
+        <p class="upload-status" id="pf-upload-status"></p>
+      </div>
+
+      <div class="field field--wide">
+        <span>Visibilidade</span>
+        <div class="toggle-row">
+          <label class="field-checkbox"><input type="checkbox" id="pf-active" checked /> Ativo</label>
+          <label class="field-checkbox"><input type="checkbox" id="pf-featured" /> Em destaque</label>
+          <label class="field-checkbox"><input type="checkbox" id="pf-bestseller" /> Mais vendido</label>
+          <label class="field-checkbox"><input type="checkbox" id="pf-new" /> Novidade</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-slideover__footer">
+      <button type="submit" class="btn btn--primary">Salvar produto</button>
+      <button type="button" class="btn btn--ghost" id="product-form-cancel">Cancelar</button>
+    </div>
+  </form>
+</div>
+
+<script type="module" src="js/admin-products.js"></script>
+</body>
+</html>

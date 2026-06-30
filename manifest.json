@@ -1,0 +1,13 @@
+{
+  "name": "Emuná",
+  "short_name": "Emuná",
+  "description": "Crochê, bijuterias, canecas da Escola de Cura, livros e produtos digitais.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#FAF7FB",
+  "theme_color": "#6F3CC3",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

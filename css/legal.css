@@ -1,0 +1,16 @@
+.legal-content { max-width: 720px; }
+.legal-content h1 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 38px);
+  color: var(--violet-deep);
+  margin: 8px 0 4px;
+}
+.legal-updated { color: var(--gray-mid); font-size: 13px; margin-bottom: 32px; }
+.legal-content h2 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--violet-deep);
+  margin: 30px 0 10px;
+}
+.legal-content p { line-height: 1.75; color: var(--charcoal); }
+.legal-content a { color: var(--violet); font-weight: 600; }

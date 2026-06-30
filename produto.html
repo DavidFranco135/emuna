@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title id="page-title">Produto — Emuná</title>
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#6F3CC3" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<link rel="stylesheet" href="css/product.css" />
+</head>
+<body class="is-loaded">
+
+<div id="header-placeholder"></div>
+
+<main>
+  <div class="container">
+    <nav class="breadcrumb" id="breadcrumb" aria-label="Caminho de navegação"></nav>
+  </div>
+
+  <section class="section section--tight" id="product-section">
+    <div class="container product-layout">
+
+      <!-- Galeria -->
+      <div class="product-gallery">
+        <div class="product-gallery__main">
+          <img id="gallery-main-img" src="" alt="" />
+          <button class="icon-btn product-gallery__share" id="share-btn" aria-label="Compartilhar">⤴</button>
+        </div>
+        <div class="product-gallery__thumbs" id="gallery-thumbs"></div>
+        <div class="product-gallery__video" id="gallery-video" hidden></div>
+      </div>
+
+      <!-- Informações -->
+      <div class="product-info">
+        <p class="eyebrow" id="product-category"></p>
+        <h1 id="product-name"></h1>
+
+        <div class="product-rating" id="product-rating"></div>
+
+        <div class="product-price" id="product-price"></div>
+        <p class="product-installments" id="product-installments"></p>
+
+        <p class="product-short-desc" id="product-short-desc"></p>
+
+        <div class="product-stock" id="product-stock"></div>
+
+        <div class="qty-stepper" id="qty-stepper">
+          <button type="button" id="qty-minus" aria-label="Diminuir quantidade">−</button>
+          <input type="number" id="qty-input" value="1" min="1" aria-label="Quantidade" />
+          <button type="button" id="qty-plus" aria-label="Aumentar quantidade">+</button>
+        </div>
+
+        <div class="product-actions">
+          <button class="btn btn--primary btn--full" id="add-to-cart-btn">Adicionar ao carrinho</button>
+          <button class="btn btn--gold btn--full" id="buy-now-btn">Comprar agora</button>
+        </div>
+
+        <div class="product-secondary-actions">
+          <a class="btn btn--ghost" id="whatsapp-btn" href="#" target="_blank" rel="noopener">💬 Falar no WhatsApp</a>
+          <button class="icon-btn" id="fav-btn" aria-label="Favoritar">♡</button>
+        </div>
+
+        <dl class="product-meta" id="product-meta"></dl>
+      </div>
+    </div>
+
+    <!-- Descrição longa -->
+    <div class="container">
+      <div class="product-tabs">
+        <div class="tab-headers">
+          <button class="tab-header is-active" data-tab="descricao">Descrição</button>
+          <button class="tab-header" data-tab="avaliacoes">Avaliações</button>
+        </div>
+        <div class="tab-panel is-active" id="tab-descricao">
+          <p id="product-long-desc"></p>
+        </div>
+        <div class="tab-panel" id="tab-avaliacoes">
+          <div id="reviews-list" class="reviews-list"></div>
+          <form id="review-form" class="review-form">
+            <h4>Deixe sua avaliação</h4>
+            <div class="review-form__stars" id="review-stars">
+              <button type="button" data-star="1">★</button>
+              <button type="button" data-star="2">★</button>
+              <button type="button" data-star="3">★</button>
+              <button type="button" data-star="4">★</button>
+              <button type="button" data-star="5">★</button>
+            </div>
+            <input type="text" id="review-name" placeholder="Seu nome" required />
+            <textarea id="review-text" placeholder="Conte como foi sua experiência" required></textarea>
+            <button type="submit" class="btn btn--primary">Enviar avaliação</button>
+            <p class="review-form__msg" id="review-form-msg"></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Relacionados -->
+  <section class="section section--lilac">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">Você também pode gostar</p>
+        <h2>Produtos relacionados</h2>
+      </div>
+      <div class="product-row" id="related-grid"></div>
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+
+<script type="module" src="js/product.js"></script>
+</body>
+</html>

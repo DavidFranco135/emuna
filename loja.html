@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Loja — Emuná</title>
+<meta name="description" content="Todos os produtos Emuná: crochê, bijuterias, canecas, livros e produtos digitais." />
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#6F3CC3" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<link rel="stylesheet" href="css/loja.css" />
+</head>
+<body class="is-loaded">
+
+<div id="header-placeholder"></div>
+
+<main>
+  <section class="shop-header">
+    <div class="container">
+      <p class="eyebrow">Catálogo completo</p>
+      <h1 id="shop-title">Loja</h1>
+      <p id="shop-subtitle" class="shop-header__subtitle"></p>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="container shop-layout">
+
+      <aside class="shop-filters" id="shop-filters">
+        <div class="filter-block">
+          <h3>Categorias</h3>
+          <ul id="filter-categories" class="filter-list"></ul>
+        </div>
+
+        <div class="filter-block">
+          <h3>Preço</h3>
+          <div class="price-range">
+            <label>De <input type="number" id="price-min" min="0" placeholder="R$ 0" /></label>
+            <label>Até <input type="number" id="price-max" min="0" placeholder="R$ 500" /></label>
+          </div>
+        </div>
+
+        <div class="filter-block">
+          <h3>Disponibilidade</h3>
+          <label class="checkbox-row">
+            <input type="checkbox" id="filter-instock" />
+            Somente em estoque
+          </label>
+        </div>
+
+        <div class="filter-block">
+          <h3>Promoção</h3>
+          <label class="checkbox-row">
+            <input type="checkbox" id="filter-promo" />
+            Somente em promoção
+          </label>
+        </div>
+
+        <button class="btn btn--ghost btn--full" id="clear-filters">Limpar filtros</button>
+      </aside>
+
+      <div class="shop-results">
+        <div class="shop-results__bar">
+          <span id="results-count" class="results-count"></span>
+          <select id="sort-select" aria-label="Ordenar por">
+            <option value="relevance">Mais relevantes</option>
+            <option value="price-asc">Menor preço</option>
+            <option value="price-desc">Maior preço</option>
+            <option value="newest">Novidades primeiro</option>
+            <option value="bestseller">Mais vendidos primeiro</option>
+          </select>
+        </div>
+        <div class="product-row" id="shop-grid"></div>
+        <p class="empty-state" id="shop-empty" hidden>Nenhum produto encontrado com esses filtros.</p>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+
+<script type="module" src="js/loja.js"></script>
+</body>
+</html>

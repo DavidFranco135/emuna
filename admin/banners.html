@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Página Inicial — Painel Emuná</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+<div class="admin-shell">
+  <div id="sidebar-placeholder"></div>
+
+  <main class="admin-main">
+
+    <div class="panel">
+      <div class="panel__header">
+        <h2>Banners principais (slider)</h2>
+        <button class="btn btn--primary" id="new-hero-btn">+ Novo banner</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>Título</th><th>Subtítulo</th><th>Ordem</th><th>Status</th><th></th></tr></thead>
+          <tbody id="hero-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel__header">
+        <h2>Banners de promoção (faixa secundária)</h2>
+        <button class="btn btn--primary" id="new-promo-btn">+ Novo banner</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>Título</th><th>Link</th><th>Ordem</th><th></th></tr></thead>
+          <tbody id="promo-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Slide-over: banner principal -->
+<div class="admin-modal-backdrop" id="hero-backdrop"></div>
+<div class="admin-slideover" id="hero-slideover" aria-hidden="true">
+  <div class="admin-slideover__header">
+    <h2 id="hero-form-title">Novo banner</h2>
+    <button class="admin-slideover__close" id="hero-form-close" aria-label="Fechar">×</button>
+  </div>
+  <form id="hero-form">
+    <input type="hidden" id="hf-id" />
+    <div class="form-grid">
+      <label class="field field--wide">Título
+        <input type="text" id="hf-title" required />
+      </label>
+      <label class="field field--wide">Subtítulo
+        <input type="text" id="hf-subtitle" />
+      </label>
+      <label class="field">Texto do botão
+        <input type="text" id="hf-cta-label" placeholder="Ver coleção" />
+      </label>
+      <label class="field">Link do botão
+        <input type="text" id="hf-cta-link" placeholder="#destaques" />
+      </label>
+      <label class="field">Ordem
+        <input type="number" id="hf-order" min="1" required />
+      </label>
+      <label class="field field-checkbox" style="align-self:end">
+        <input type="checkbox" id="hf-active" checked /> Ativo
+      </label>
+      <div class="field field--wide">
+        <span>Imagem de fundo</span>
+        <div class="image-thumb-list" id="hf-image-thumb"></div>
+        <label class="btn btn--ghost btn--sm upload-label">
+          📷 Enviar imagem
+          <input type="file" id="hf-image-upload" accept="image/*" hidden />
+        </label>
+        <p class="upload-status" id="hf-upload-status"></p>
+      </div>
+    </div>
+    <div class="admin-slideover__footer">
+      <button type="submit" class="btn btn--primary">Salvar banner</button>
+      <button type="button" class="btn btn--ghost" id="hero-form-cancel">Cancelar</button>
+    </div>
+  </form>
+</div>
+
+<!-- Slide-over: banner de promoção -->
+<div class="admin-modal-backdrop" id="promo-backdrop"></div>
+<div class="admin-slideover" id="promo-slideover" aria-hidden="true" style="width:min(420px,94vw)">
+  <div class="admin-slideover__header">
+    <h2 id="promo-form-title">Novo banner</h2>
+    <button class="admin-slideover__close" id="promo-form-close" aria-label="Fechar">×</button>
+  </div>
+  <form id="promo-form">
+    <input type="hidden" id="pmf-id" />
+    <div class="form-grid">
+      <label class="field field--wide">Título
+        <input type="text" id="pmf-title" required />
+      </label>
+      <label class="field field--wide">Link
+        <input type="text" id="pmf-link" placeholder="#" />
+      </label>
+      <label class="field">Ordem
+        <input type="number" id="pmf-order" min="1" required />
+      </label>
+      <div class="field field--wide">
+        <span>Imagem</span>
+        <div class="image-thumb-list" id="pmf-image-thumb"></div>
+        <label class="btn btn--ghost btn--sm upload-label">
+          📷 Enviar imagem
+          <input type="file" id="pmf-image-upload" accept="image/*" hidden />
+        </label>
+        <p class="upload-status" id="pmf-upload-status"></p>
+      </div>
+    </div>
+    <div class="admin-slideover__footer">
+      <button type="submit" class="btn btn--primary">Salvar banner</button>
+      <button type="button" class="btn btn--ghost" id="promo-form-cancel">Cancelar</button>
+    </div>
+  </form>
+</div>
+
+<script type="module" src="js/admin-banners.js"></script>
+</body>
+</html>

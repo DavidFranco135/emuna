@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Emuná — Feito à mão, com fé e delicadeza</title>
+<meta name="description" content="Emuná: crochê, bijuterias, canecas da Escola de Cura, livros e produtos digitais feitos com cuidado." />
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#6F3CC3" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<div id="header-placeholder"></div>
+
+<main>
+
+  <!-- ===================== HERO SLIDER ===================== -->
+  <section class="hero">
+    <div class="hero-track" id="hero-track"></div>
+    <div class="hero-dots" id="hero-dots"></div>
+    <div class="hero-nav">
+      <button class="icon-btn" id="hero-prev" aria-label="Slide anterior">‹</button>
+      <button class="icon-btn" id="hero-next" aria-label="Próximo slide">›</button>
+    </div>
+  </section>
+
+  <!-- ===================== PROMO STRIP ===================== -->
+  <section class="promo-strip container">
+    <div class="promo-track" id="promo-track"></div>
+  </section>
+
+  <!-- ===================== DESTAQUES ===================== -->
+  <section class="section" id="destaques">
+    <div class="container">
+      <div class="row-header">
+        <div class="section-heading" style="margin-bottom:0">
+          <p class="eyebrow">Selecionados a dedo</p>
+          <h2>Destaques</h2>
+        </div>
+        <a class="see-all" href="#">Ver todos →</a>
+      </div>
+      <div class="product-row" id="featured-grid"></div>
+    </div>
+  </section>
+
+  <div class="container">
+    <svg class="stitch-divider" viewBox="0 0 1200 22" preserveAspectRatio="none" fill="none" aria-hidden="true">
+      <path d="M0 11c20-10 40 10 60 0s40-10 60 0 40 10 60 0 40-10 60 0 40 10 60 0 40-10 60 0 40 10 60 0 40-10 60 0 40 10 60 0 40-10 60 0 40 10 60 0 40-10 60 0 40 10 60 0 40-10 60 0 40 10 60 0 40-10 60 0"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <!-- ===================== CATEGORIAS ===================== -->
+  <section class="section section--tight" id="categorias">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">Explore</p>
+        <h2>Categorias</h2>
+        <p>Cada categoria tem sua própria história — escolha por onde começar.</p>
+      </div>
+      <div class="categories-grid" id="categories-grid"></div>
+    </div>
+  </section>
+
+  <!-- ===================== MAIS VENDIDOS ===================== -->
+  <section class="section section--lilac" id="mais-vendidos">
+    <div class="container">
+      <div class="row-header">
+        <div class="section-heading" style="margin-bottom:0">
+          <p class="eyebrow">A preferência de quem já comprou</p>
+          <h2>Mais vendidos</h2>
+        </div>
+        <a class="see-all" href="#">Ver todos →</a>
+      </div>
+      <div class="product-row" id="bestsellers-grid"></div>
+    </div>
+  </section>
+
+  <!-- ===================== NOVIDADES ===================== -->
+  <section class="section" id="novidades">
+    <div class="container">
+      <div class="row-header">
+        <div class="section-heading" style="margin-bottom:0">
+          <p class="eyebrow">Acabou de chegar</p>
+          <h2>Novidades</h2>
+        </div>
+        <a class="see-all" href="#">Ver todos →</a>
+      </div>
+      <div class="product-row" id="new-grid"></div>
+    </div>
+  </section>
+
+  <!-- ===================== SOBRE ===================== -->
+  <section class="section section--tight" id="sobre">
+    <div class="container about">
+      <div class="about-media">
+        <img src="https://images.unsplash.com/photo-1556760544-74068565f05c?q=80&w=900&auto=format&fit=crop" alt="Peças artesanais Emuná feitas à mão" loading="lazy" />
+      </div>
+      <div class="about-copy">
+        <p class="eyebrow">Nossa história</p>
+        <h2>Cada ponto carrega uma intenção</h2>
+        <p>A Emuná nasceu da vontade de transformar fé, cuidado e delicadeza em peças que se possa tocar. Cada item em crochê é feito ponto a ponto, cada bijuteria é escolhida com carinho, e cada caneca da Escola de Cura carrega uma mensagem para o seu dia.</p>
+        <p>Acreditamos que um produto bem-feito é também um gesto de afeto — para quem compra e para quem recebe de presente.</p>
+        <a class="btn btn--ghost" href="#destaques">Conhecer a coleção</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DEPOIMENTOS ===================== -->
+  <section class="section section--lilac" id="depoimentos">
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">Quem já viveu a experiência</p>
+        <h2>Depoimentos</h2>
+      </div>
+      <div class="testimonials-track" id="testimonials-track"></div>
+    </div>
+  </section>
+
+  <!-- ===================== NEWSLETTER ===================== -->
+  <section class="section">
+    <div class="container">
+      <div class="newsletter">
+        <p class="eyebrow" style="color:var(--gold-soft)">Fique por dentro</p>
+        <h2>Receba novidades e promoções exclusivas</h2>
+        <p>Sem spam — só o essencial, direto na sua caixa de entrada.</p>
+        <form class="newsletter-form" id="newsletter-form">
+          <input type="email" required placeholder="Seu melhor e-mail" aria-label="E-mail" />
+          <button class="btn btn--gold" type="submit">Quero receber</button>
+        </form>
+        <p class="newsletter-msg" id="newsletter-msg"></p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<div id="footer-placeholder"></div>
+
+<script type="module" src="js/home.js"></script>
+</body>
+</html>

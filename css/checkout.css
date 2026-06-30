@@ -1,0 +1,99 @@
+.checkout-layout {
+  display: grid;
+  gap: 32px;
+  align-items: start;
+}
+@media (min-width: 920px) {
+  .checkout-layout { grid-template-columns: 1fr 360px; }
+}
+
+.checkout-fieldset {
+  border: none;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 22px 24px;
+  margin-bottom: 20px;
+}
+.checkout-fieldset legend {
+  font-family: var(--font-display);
+  color: var(--violet-deep);
+  font-size: 17px;
+  padding: 0 4px;
+  margin-bottom: 14px;
+}
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.field-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--gray-mid);
+}
+.field--wide { grid-column: 1 / -1; }
+.field-grid input {
+  padding: 11px 13px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-line);
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--charcoal);
+}
+
+.payment-options { display: flex; flex-direction: column; gap: 10px; }
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--gray-line);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.payment-option input { accent-color: var(--violet); }
+.payment-option small { display: block; color: var(--gray-mid); font-size: 12px; }
+.payment-option:has(input:checked) { border-color: var(--violet); background: var(--lilac); }
+
+.checkout-summary {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  position: sticky;
+  top: calc(var(--header-h) + 16px);
+}
+.checkout-summary h3 {
+  font-family: var(--font-display);
+  color: var(--violet-deep);
+  margin-bottom: 16px;
+}
+.checkout-items { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.checkout-item-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  gap: 10px;
+}
+.checkout-item-row span:first-child { color: var(--charcoal); }
+.checkout-item-row span:last-child { color: var(--gray-mid); white-space: nowrap; }
+
+.checkout-success {
+  text-align: center;
+  padding: 80px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.checkout-success__icon { font-size: 40px; color: var(--gold); }
+.checkout-success h2 {
+  font-family: var(--font-display);
+  color: var(--violet-deep);
+  font-size: 28px;
+}
+.checkout-success p { color: var(--gray-mid); max-width: 420px; margin-bottom: 10px; }

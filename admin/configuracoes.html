@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Configurações — Painel Emuná</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+<div class="admin-shell">
+  <div id="sidebar-placeholder"></div>
+
+  <main class="admin-main">
+    <form id="settings-form">
+
+      <div class="panel">
+        <div class="panel__header"><h2>Identidade da loja</h2></div>
+        <div class="form-grid">
+          <label class="field">Nome da loja
+            <input type="text" id="st-store-name" required />
+          </label>
+          <label class="field">E-mail de contato
+            <input type="email" id="st-email" required />
+          </label>
+          <label class="field">Telefone
+            <input type="text" id="st-phone" />
+          </label>
+          <label class="field">WhatsApp (com DDI, só números)
+            <input type="text" id="st-whatsapp" placeholder="5521999999999" />
+          </label>
+          <label class="field field--wide">Endereço
+            <input type="text" id="st-address" />
+          </label>
+          <label class="field">URL do logo
+            <input type="url" id="st-logo" placeholder="https://…" />
+          </label>
+          <label class="field">URL do favicon
+            <input type="url" id="st-favicon" placeholder="https://…" />
+          </label>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel__header"><h2>Redes sociais</h2></div>
+        <div class="form-grid">
+          <label class="field">Instagram
+            <input type="url" id="st-instagram" placeholder="https://instagram.com/…" />
+          </label>
+          <label class="field">Facebook
+            <input type="url" id="st-facebook" placeholder="https://facebook.com/…" />
+          </label>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel__header"><h2>SEO &amp; integrações</h2></div>
+        <div class="form-grid">
+          <label class="field field--wide">Título SEO (meta title padrão)
+            <input type="text" id="st-seo-title" />
+          </label>
+          <label class="field field--wide">Descrição SEO (meta description padrão)
+            <textarea id="st-seo-desc"></textarea>
+          </label>
+          <label class="field">Google Analytics (ID)
+            <input type="text" id="st-ga" placeholder="G-XXXXXXXXXX" />
+          </label>
+          <label class="field">Google Tag Manager (ID)
+            <input type="text" id="st-gtm" placeholder="GTM-XXXXXXX" />
+          </label>
+          <label class="field">Meta Pixel (ID)
+            <input type="text" id="st-pixel" placeholder="000000000000000" />
+          </label>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel__header"><h2>Políticas</h2></div>
+        <div class="form-grid">
+          <label class="field field--wide">Política de privacidade (texto)
+            <textarea id="st-privacy" placeholder="Editado em /politica-privacidade.html — campo de referência"></textarea>
+          </label>
+          <label class="field field--wide">Trocas e devoluções (texto)
+            <textarea id="st-returns" placeholder="Editado em /trocas.html — campo de referência"></textarea>
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn--primary">Salvar configurações</button>
+    </form>
+  </main>
+</div>
+
+<script type="module" src="js/admin-settings.js"></script>
+</body>
+</html>

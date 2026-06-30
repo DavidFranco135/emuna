@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Finalizar compra — Emuná</title>
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#6F3CC3" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<link rel="stylesheet" href="css/checkout.css" />
+</head>
+<body class="is-loaded">
+
+<div id="header-placeholder"></div>
+
+<main>
+  <section class="section section--tight">
+    <div class="container">
+
+      <div id="checkout-empty" class="cart-empty" hidden>
+        <p>Seu carrinho está vazio.</p>
+        <a class="btn btn--primary" href="loja.html">Ver produtos</a>
+      </div>
+
+      <div class="checkout-layout" id="checkout-layout">
+        <form id="checkout-form" class="checkout-form">
+          <div class="section-heading" style="margin-bottom:24px">
+            <p class="eyebrow">Quase lá</p>
+            <h2>Finalizar compra</h2>
+          </div>
+
+          <fieldset class="checkout-fieldset">
+            <legend>Dados de contato</legend>
+            <div class="field-grid">
+              <label>Nome completo
+                <input type="text" id="ck-name" required />
+              </label>
+              <label>E-mail
+                <input type="email" id="ck-email" required />
+              </label>
+              <label>Telefone / WhatsApp
+                <input type="tel" id="ck-phone" required />
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="checkout-fieldset">
+            <legend>Endereço de entrega</legend>
+            <div class="field-grid">
+              <label>CEP
+                <input type="text" id="ck-cep" required maxlength="9" />
+              </label>
+              <label>Cidade
+                <input type="text" id="ck-city" required />
+              </label>
+              <label>Estado
+                <input type="text" id="ck-state" maxlength="2" required />
+              </label>
+              <label class="field--wide">Endereço
+                <input type="text" id="ck-address" required />
+              </label>
+              <label>Número
+                <input type="text" id="ck-number" required />
+              </label>
+              <label>Complemento
+                <input type="text" id="ck-complement" />
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="checkout-fieldset">
+            <legend>Forma de pagamento</legend>
+            <div class="payment-options">
+              <label class="payment-option">
+                <input type="radio" name="payment" value="pix" checked />
+                <span>📱 Pix <small>aprovação imediata</small></span>
+              </label>
+              <label class="payment-option">
+                <input type="radio" name="payment" value="cartao" />
+                <span>💳 Cartão de crédito <small>em até 6x</small></span>
+              </label>
+              <label class="payment-option">
+                <input type="radio" name="payment" value="boleto" />
+                <span>🧾 Boleto <small>até 3 dias úteis</small></span>
+              </label>
+            </div>
+          </fieldset>
+
+          <button type="submit" class="btn btn--primary btn--full" id="confirm-order-btn">Confirmar pedido</button>
+        </form>
+
+        <aside class="checkout-summary">
+          <h3>Seu pedido</h3>
+          <div id="checkout-items" class="checkout-items"></div>
+          <dl class="summary-lines">
+            <div><dt>Subtotal</dt><dd id="ck-subtotal">R$ 0,00</dd></div>
+            <div><dt>Frete</dt><dd id="ck-shipping">Grátis</dd></div>
+          </dl>
+          <div class="summary-total">
+            <span>Total</span>
+            <strong id="ck-total">R$ 0,00</strong>
+          </div>
+        </aside>
+      </div>
+
+      <div class="checkout-success" id="checkout-success" hidden>
+        <span class="checkout-success__icon">✦</span>
+        <h2>Pedido confirmado!</h2>
+        <p>Recebemos seu pedido <strong id="success-order-id"></strong> e em breve você receberá a confirmação por e-mail.</p>
+        <a class="btn btn--primary" href="index.html">Voltar para a loja</a>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<div id="footer-placeholder"></div>
+
+<script type="module" src="js/checkout.js"></script>
+</body>
+</html>
