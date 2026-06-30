@@ -444,14 +444,24 @@ ul { list-style: none; }
    Categories
    ============================================================ */
 .categories-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
   gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding: 4px 4px 14px;
+  margin: -4px -4px 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-line) transparent;
 }
-@media (min-width: 720px) {
-  .categories-grid { grid-template-columns: repeat(5, 1fr); }
-}
+.categories-grid::-webkit-scrollbar { height: 6px; }
+.categories-grid::-webkit-scrollbar-thumb { background: var(--gray-line); border-radius: 999px; }
+.categories-grid.drag-scroll { cursor: grab; }
+.categories-grid.drag-scroll.is-dragging { cursor: grabbing; scroll-snap-type: none; }
 .category-card {
+  flex: 0 0 auto;
+  width: clamp(140px, 38vw, 190px);
+  scroll-snap-align: start;
   position: relative;
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -486,12 +496,28 @@ ul { list-style: none; }
    Product grids
    ============================================================ */
 .product-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
   gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding: 4px 4px 14px;
+  margin: -4px -4px 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-line) transparent;
 }
-@media (min-width: 640px) { .product-row { grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 1000px) { .product-row { grid-template-columns: repeat(4, 1fr); } }
+.product-row::-webkit-scrollbar { height: 6px; }
+.product-row::-webkit-scrollbar-thumb { background: var(--gray-line); border-radius: 999px; }
+.product-row.drag-scroll { cursor: grab; }
+.product-row.drag-scroll.is-dragging { cursor: grabbing; scroll-snap-type: none; }
+
+.product-row .product-card {
+  flex: 0 0 auto;
+  width: clamp(170px, 42vw, 240px);
+  scroll-snap-align: start;
+}
+@media (min-width: 640px) { .product-row .product-card { width: 220px; } }
+@media (min-width: 1000px) { .product-row .product-card { width: 250px; } }
 
 .product-card {
   background: var(--white);
