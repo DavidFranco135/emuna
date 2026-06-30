@@ -11,6 +11,7 @@
   gap: 44px;
   margin-top: 24px;
 }
+.product-gallery, .product-info { min-width: 0; }
 @media (min-width: 900px) {
   .product-layout { grid-template-columns: 1.1fr 1fr; }
 }
@@ -164,3 +165,7 @@
 }
 .review-form textarea { min-height: 90px; resize: vertical; }
 .review-form__msg { font-size: 13px; color: #2E7D4F; min-height: 18px; }
+
+@media (max-width: 600px) {
+  .qty-stepper input { width: 56px; }
+}
