@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Depoimentos — Painel Emuná</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+<div class="admin-shell">
+  <div id="sidebar-placeholder"></div>
+
+  <main class="admin-main">
+    <div class="panel">
+      <div class="panel__header">
+        <h2>Depoimentos</h2>
+        <button class="btn btn--primary" id="new-testimonial-btn">+ Novo depoimento</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>Cliente</th><th>Depoimento</th><th>Nota</th><th></th></tr></thead>
+          <tbody id="testimonials-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="admin-modal-backdrop" id="testimonial-backdrop"></div>
+<div class="admin-slideover" id="testimonial-slideover" aria-hidden="true" style="width:min(440px,94vw)">
+  <div class="admin-slideover__header">
+    <h2 id="testimonial-form-title">Novo depoimento</h2>
+    <button class="admin-slideover__close" id="testimonial-form-close" aria-label="Fechar">×</button>
+  </div>
+  <form id="testimonial-form">
+    <input type="hidden" id="tf-id" />
+    <div class="form-grid">
+      <label class="field field--wide">Nome do cliente
+        <input type="text" id="tf-name" required />
+      </label>
+      <label class="field field--wide">Depoimento
+        <textarea id="tf-text" required></textarea>
+      </label>
+      <label class="field">Nota (1 a 5)
+        <input type="number" id="tf-rating" min="1" max="5" value="5" required />
+      </label>
+      <div class="field field--wide">
+        <span>Foto (opcional)</span>
+        <div class="image-thumb-list" id="tf-photo-thumb"></div>
+        <label class="btn btn--ghost btn--sm upload-label">
+          📷 Enviar foto
+          <input type="file" id="tf-photo-upload" accept="image/*" hidden />
+        </label>
+        <p class="upload-status" id="tf-upload-status"></p>
+      </div>
+    </div>
+    <div class="admin-slideover__footer">
+      <button type="submit" class="btn btn--primary">Salvar depoimento</button>
+      <button type="button" class="btn btn--ghost" id="testimonial-form-cancel">Cancelar</button>
+    </div>
+  </form>
+</div>
+
+<script type="module" src="js/admin-testimonials.js"></script>
+</body>
+</html>
