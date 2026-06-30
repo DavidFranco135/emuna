@@ -99,11 +99,13 @@ function openHeroForm(banner = null) {
   $("#hf-upload-status").textContent = "";
   $("#hero-backdrop").classList.add("is-open");
   $("#hero-slideover").classList.add("is-open");
+  $("#hero-slideover").setAttribute("aria-hidden", "false");
 }
 
 function closeHeroForm() {
   $("#hero-backdrop").classList.remove("is-open");
   $("#hero-slideover").classList.remove("is-open");
+  $("#hero-slideover").setAttribute("aria-hidden", "true");
 }
 
 async function handleHeroSubmit(e) {
@@ -190,11 +192,13 @@ function openPromoForm(banner = null) {
   $("#pmf-upload-status").textContent = "";
   $("#promo-backdrop").classList.add("is-open");
   $("#promo-slideover").classList.add("is-open");
+  $("#promo-slideover").setAttribute("aria-hidden", "false");
 }
 
 function closePromoForm() {
   $("#promo-backdrop").classList.remove("is-open");
   $("#promo-slideover").classList.remove("is-open");
+  $("#promo-slideover").setAttribute("aria-hidden", "true");
 }
 
 async function handlePromoSubmit(e) {
