@@ -88,11 +88,13 @@ function openSlideover(category = null) {
   $("#cf-upload-status").textContent = "";
   $("#category-backdrop").classList.add("is-open");
   $("#category-slideover").classList.add("is-open");
+  $("#category-slideover").setAttribute("aria-hidden", "false");
 }
 
 function closeSlideover() {
   $("#category-backdrop").classList.remove("is-open");
   $("#category-slideover").classList.remove("is-open");
+  $("#category-slideover").setAttribute("aria-hidden", "true");
 }
 
 async function handleSubmit(e) {
