@@ -5,6 +5,7 @@ import { getCart, getCartTotal, formatBRL, clearCart } from "./cart.js";
 import { initLayout } from "./layout.js";
 import { onCustomerAuthChange, getMyProfile } from "./customer-auth.js";
 import { createOrder, getStoreSettings } from "./firestore-service.js";
+import { toWhatsAppNumber } from "./phone-utils.js";
 
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 
@@ -80,7 +81,7 @@ function showPaymentInstructions({ orderId, payment, total, settings }) {
     total
   )}) e quero confirmar o pagamento.`;
   $("#whatsapp-confirm-btn").href = settings.whatsapp
-    ? `https://wa.me/${settings.whatsapp}?text=${encodeURIComponent(message)}`
+    ? `https://wa.me/${toWhatsAppNumber(settings.whatsapp)}?text=${encodeURIComponent(message)}`
     : "#";
 }
 
