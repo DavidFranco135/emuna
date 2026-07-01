@@ -30,11 +30,11 @@ function renderTable() {
     .map(
       (c) => `
       <tr data-id="${c.id}">
-        <td><strong>${c.code}</strong></td>
-        <td>${TYPE_LABELS[c.type] || c.type}</td>
-        <td>${c.type === "percent" ? `${c.value}%` : "—"}</td>
-        <td>${c.label || "—"}</td>
-        <td>
+        <td data-label="Código"><strong>${c.code}</strong></td>
+        <td data-label="Tipo">${TYPE_LABELS[c.type] || c.type}</td>
+        <td data-label="Valor">${c.type === "percent" ? `${c.value}%` : "—"}</td>
+        <td data-label="Descrição">${c.label || "—"}</td>
+        <td class="cell-actions">
           <div class="table-actions">
             <button class="btn btn--ghost btn--sm" data-edit="${c.id}">Editar</button>
             <button class="btn btn--danger btn--sm" data-delete="${c.id}">Excluir</button>
