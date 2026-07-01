@@ -1,278 +1,270 @@
 // ============================================================
-// EMUNÁ ADMIN · Produtos
+// EMUNÁ · Página de produto
 // ============================================================
-import { initAdminLayout } from "./admin-layout.js";
-import { showToast } from "./admin-toast.js";
 import {
-  getAllProducts,
-  getAllCategories,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-  duplicateProduct,
-} from "../../js/firestore-service.js";
-import { formatBRL } from "../../js/cart.js";
-import { uploadMultipleToImgBB } from "../../js/imgbb-upload.js";
+  getProductById,
+  getRelatedProducts,
+  getCategories,
+  getStoreSettings,
+  addProductReview,
+} from "./firestore-service.js";
+import { addItem, formatBRL } from "./cart.js";
+import { isFavorite, toggleFavorite } from "./favorites.js";
+import { initLayout } from "./layout.js";
+import { renderProductGrid } from "./product-card.js";
+import { toWhatsAppNumber } from "./phone-utils.js";
 
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
+const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
-let products = [];
-let categories = [];
-
-async function loadData() {
-  [products, categories] = await Promise.all([getAllProducts(), getAllCategories()]);
+function getProductId() {
+  return new URLSearchParams(window.location.search).get("id");
 }
 
-function categoryName(id) {
-  return categories.find((c) => c.id === id)?.name || "—";
+function renderBreadcrumb(product, category) {
+  $("#breadcrumb").innerHTML = `
+    <a href="index.html">Início</a><span>/</span>
+    <a href="loja.html">Loja</a><span>/</span>
+    ${category ? `<a href="loja.html?categoria=${category.id}">${category.name}</a><span>/</span>` : ""}
+    <span>${product.name}</span>
+  `;
 }
 
-function populateCategorySelects() {
-  const options = categories.map((c) => `<option value="${c.id}">${c.name}</option>`).join("");
-  $("#pf-category").innerHTML = options;
-  $("#product-category-filter").innerHTML = `<option value="">Todas as categorias</option>${options}`;
-}
+function renderGallery(product) {
+  const images = product.images?.length ? product.images : [""];
+  $("#gallery-main-img").src = images[0];
+  $("#gallery-main-img").alt = product.name;
 
-function currentFilters() {
-  return {
-    q: $("#product-search").value.trim().toLowerCase(),
-    category: $("#product-category-filter").value,
-    stock: $("#product-stock-filter").value,
-  };
-}
+  const thumbs = $("#gallery-thumbs");
+  thumbs.innerHTML = "";
+  images.forEach((src, i) => {
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = `${product.name} — foto ${i + 1}`;
+    if (i === 0) img.classList.add("is-active");
+    img.addEventListener("click", () => {
+      $("#gallery-main-img").src = src;
+      $$(".product-gallery__thumbs img").forEach((t) => t.classList.remove("is-active"));
+      img.classList.add("is-active");
+    });
+    thumbs.appendChild(img);
+  });
 
-function renderTable() {
-  const f = currentFilters();
-  let list = [...products];
-
-  if (f.q) {
-    list = list.filter(
-      (p) => p.name.toLowerCase().includes(f.q) || (p.sku || "").toLowerCase().includes(f.q)
-    );
+  if (product.video) {
+    const videoWrap = $("#gallery-video");
+    videoWrap.hidden = false;
+    videoWrap.innerHTML = `<iframe src="${product.video}" title="Vídeo do produto" allowfullscreen></iframe>`;
   }
-  if (f.category) list = list.filter((p) => p.categoryId === f.category);
-  if (f.stock === "low") list = list.filter((p) => p.stock > 0 && p.stock <= 5);
-  if (f.stock === "out") list = list.filter((p) => p.stock === 0);
+}
 
-  const body = $("#products-body");
-  if (!list.length) {
-    body.innerHTML = `<tr><td colspan="8" class="empty-state">Nenhum produto encontrado.</td></tr>`;
+function installmentsText(value) {
+  const max = 6;
+  const installments = Math.min(max, Math.max(1, Math.floor(value / 30)) || 1);
+  const per = value / installments;
+  return installments > 1
+    ? `ou ${installments}x de ${formatBRL(per)} sem juros`
+    : "à vista";
+}
+
+function renderInfo(product, category) {
+  document.title = `${product.name} — Emuná`;
+  $("#page-title").textContent = `${product.name} — Emuná`;
+  $("#product-category").textContent = category?.name || "";
+  $("#product-name").textContent = product.name;
+  $("#product-short-desc").textContent = product.shortDescription || "";
+  $("#product-long-desc").textContent = product.description || product.shortDescription || "";
+
+  const finalPrice = product.promoPrice || product.price;
+  $("#product-price").innerHTML = product.promoPrice
+    ? `<span class="price-old">${formatBRL(product.price)}</span><span class="price-new">${formatBRL(product.promoPrice)}</span>`
+    : `<span class="price-new">${formatBRL(product.price)}</span>`;
+  $("#product-installments").textContent = installmentsText(finalPrice);
+
+  const ratingWrap = $("#product-rating");
+  if (product.rating) {
+    ratingWrap.innerHTML = `${"★".repeat(Math.round(product.rating))}${"☆".repeat(5 - Math.round(product.rating))} <span class="count">${product.rating.toFixed(1)} · ${product.reviews?.length || 0} avaliações</span>`;
+  }
+
+  const stockWrap = $("#product-stock");
+  if (product.stock === 0) {
+    stockWrap.textContent = "Produto esgotado";
+    stockWrap.className = "product-stock out-stock";
+    $("#add-to-cart-btn").disabled = true;
+    $("#buy-now-btn").disabled = true;
+  } else if (product.stock <= 5) {
+    stockWrap.textContent = `Últimas ${product.stock} unidades em estoque`;
+    stockWrap.className = "product-stock low-stock";
+  } else {
+    stockWrap.textContent = "Em estoque";
+    stockWrap.className = "product-stock in-stock";
+  }
+
+  $("#qty-input").max = product.stock || 999;
+
+  $("#product-meta").innerHTML = `
+    <dt>SKU</dt><dd>${product.sku || "—"}</dd>
+    <dt>Categoria</dt><dd>${category?.name || "—"}</dd>
+    <dt>Peso</dt><dd>${product.weight ? `${product.weight} kg` : "—"}</dd>
+    <dt>Dimensões</dt><dd>${product.dimensions || "—"}</dd>
+  `;
+
+  const favBtn = $("#fav-btn");
+  const syncFav = () => {
+    const fav = isFavorite(product.id);
+    favBtn.textContent = fav ? "♥" : "♡";
+    favBtn.classList.toggle("is-active", fav);
+  };
+  syncFav();
+  favBtn.addEventListener("click", () => {
+    toggleFavorite(product.id);
+    syncFav();
+  });
+}
+
+function renderReviews(product) {
+  const list = $("#reviews-list");
+  const reviews = product.reviews || [];
+  if (!reviews.length) {
+    list.innerHTML = `<p class="empty-state">Ainda não há avaliações — seja a primeira a avaliar.</p>`;
     return;
   }
-
-  body.innerHTML = list
-    .map((p) => {
-      const isActive = p.active !== false;
-      const badges = [
-        p.featured ? '<span class="badge badge--violet">Destaque</span>' : "",
-        p.promoPrice ? '<span class="badge badge--orange">Promoção</span>' : "",
-        p.isNew ? '<span class="badge badge--green">Novidade</span>' : "",
-        !isActive ? '<span class="badge badge--gray">Inativo</span>' : "",
-      ].join(" ");
-      const stockBadge =
-        p.stock === 0
-          ? '<span class="badge badge--red">Esgotado</span>'
-          : p.stock <= 5
-          ? '<span class="badge badge--orange">Baixo</span>'
-          : "";
-
-      return `
-        <tr data-id="${p.id}">
-          <td class="cell-thumb"><img class="table-thumb" src="${p.images?.[0] || ""}" alt="" /></td>
-          <td data-label="Produto">${p.name}</td>
-          <td data-label="SKU">${p.sku || "—"}</td>
-          <td data-label="Categoria">${categoryName(p.categoryId)}</td>
-          <td data-label="Preço">${p.promoPrice ? `<s style="opacity:.5">${formatBRL(p.price)}</s> ${formatBRL(p.promoPrice)}` : formatBRL(p.price)}</td>
-          <td data-label="Estoque">${p.stock} ${stockBadge}</td>
-          <td data-label="Status">${badges || "—"}</td>
-          <td class="cell-actions">
-            <div class="table-actions">
-              <button class="btn btn--ghost btn--sm" data-edit="${p.id}">Editar</button>
-              <button class="btn btn--ghost btn--sm" data-duplicate="${p.id}">Duplicar</button>
-              <button class="btn btn--ghost btn--sm" data-toggle="${p.id}">${isActive ? "Desativar" : "Ativar"}</button>
-              <button class="btn btn--danger btn--sm" data-delete="${p.id}">Excluir</button>
-            </div>
-          </td>
-        </tr>
-      `;
-    })
+  list.innerHTML = reviews
+    .map(
+      (r) => `
+      <div class="review-item">
+        <div class="review-item__stars">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</div>
+        <div class="review-item__name">${r.name}</div>
+        <p class="review-item__text">${r.text}</p>
+      </div>
+    `
+    )
     .join("");
 }
 
-// ---------- slide-over form ----------
-function openSlideover(product = null) {
-  $("#product-form-title").textContent = product ? "Editar produto" : "Novo produto";
-  $("#pf-id").value = product?.id || "";
-  $("#pf-name").value = product?.name || "";
-  $("#pf-short-desc").value = product?.shortDescription || "";
-  $("#pf-description").value = product?.description || "";
-  $("#pf-category").value = product?.categoryId || categories[0]?.id || "";
-  $("#pf-sku").value = product?.sku || "";
-  $("#pf-price").value = product?.price ?? "";
-  $("#pf-promo-price").value = product?.promoPrice ?? "";
-  $("#pf-stock").value = product?.stock ?? 0;
-  $("#pf-weight").value = product?.weight ?? "";
-  $("#pf-dimensions").value = product?.dimensions || "";
-  $("#pf-video").value = product?.video || "";
-  $("#pf-active").checked = product?.active !== false;
-  $("#pf-featured").checked = !!product?.featured;
-  $("#pf-bestseller").checked = !!product?.bestSeller;
-  $("#pf-new").checked = !!product?.isNew;
-
-  currentImages = product?.images ? [...product.images] : [];
-  renderImageThumbs();
-  $("#pf-upload-status").textContent = "";
-
-  $("#product-backdrop").classList.add("is-open");
-  $("#product-slideover").classList.add("is-open");
-  $("#product-slideover").setAttribute("aria-hidden", "false");
-}
-
-function closeSlideover() {
-  $("#product-backdrop").classList.remove("is-open");
-  $("#product-slideover").classList.remove("is-open");
-  $("#product-slideover").setAttribute("aria-hidden", "true");
-}
-
-let currentImages = [];
-
-function renderImageThumbs() {
-  const wrap = $("#pf-images-list");
-  wrap.innerHTML = "";
-  currentImages.forEach((url, i) => {
-    const thumb = document.createElement("div");
-    thumb.className = "image-thumb";
-    thumb.innerHTML = `<img src="${url}" alt="" /><button type="button" aria-label="Remover">×</button>`;
-    thumb.querySelector("button").addEventListener("click", () => {
-      currentImages.splice(i, 1);
-      renderImageThumbs();
+function initTabs() {
+  $$(".tab-header").forEach((header) => {
+    header.addEventListener("click", () => {
+      $$(".tab-header").forEach((h) => h.classList.remove("is-active"));
+      $$(".tab-panel").forEach((p) => p.classList.remove("is-active"));
+      header.classList.add("is-active");
+      $(`#tab-${header.dataset.tab}`).classList.add("is-active");
     });
-    wrap.appendChild(thumb);
   });
 }
 
-async function handleImageUpload(e) {
-  const files = e.target.files;
-  if (!files.length) return;
+function initReviewForm(product) {
+  let selectedStar = 5;
+  const stars = $$("#review-stars button");
+  stars.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      selectedStar = Number(btn.dataset.star);
+      stars.forEach((b) => b.classList.toggle("is-active", Number(b.dataset.star) <= selectedStar));
+    });
+  });
+  stars.forEach((b) => b.classList.toggle("is-active", Number(b.dataset.star) <= selectedStar));
 
-  const statusEl = $("#pf-upload-status");
-  statusEl.className = "upload-status";
-  statusEl.textContent = `Enviando ${files.length} foto${files.length > 1 ? "s" : ""}…`;
+  $("#review-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = $("#review-name").value.trim();
+    const text = $("#review-text").value.trim();
+    if (!name || !text) return;
 
-  // miniaturas de carregamento, para feedback visual imediato
-  const placeholders = Array.from(files).map(() => {
-    const div = document.createElement("div");
-    div.className = "image-thumb is-uploading";
-    div.textContent = "Enviando…";
-    $("#pf-images-list").appendChild(div);
-    return div;
+    const submitBtn = $("#review-form button[type=submit]");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Enviando…";
+
+    const review = { name, rating: selectedStar, text, date: new Date().toISOString() };
+    await addProductReview(product.id, review);
+
+    product.reviews = [review, ...(product.reviews || [])];
+    renderReviews(product);
+    $("#review-form").reset();
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Enviar avaliação";
+    $("#review-form-msg").textContent = "Obrigada pela avaliação!";
+    setTimeout(() => ($("#review-form-msg").textContent = ""), 5000);
+  });
+}
+
+function initQtyStepper(product) {
+  const input = $("#qty-input");
+  $("#qty-minus").addEventListener("click", () => {
+    input.value = Math.max(1, Number(input.value) - 1);
+  });
+  $("#qty-plus").addEventListener("click", () => {
+    const max = product.stock || 999;
+    input.value = Math.min(max, Number(input.value) + 1);
+  });
+}
+
+function initActions(product, settings) {
+  const getQty = () => Math.max(1, Number($("#qty-input").value) || 1);
+
+  $("#add-to-cart-btn").addEventListener("click", () => {
+    addItem(product, getQty());
+    const btn = $("#add-to-cart-btn");
+    btn.textContent = "Adicionado ✓";
+    setTimeout(() => (btn.textContent = "Adicionar ao carrinho"), 1400);
   });
 
-  const urls = await uploadMultipleToImgBB(files);
-  placeholders.forEach((p) => p.remove());
-
-  const failed = urls.filter((u) => !u).length;
-  urls.forEach((url) => {
-    if (url) currentImages.push(url);
+  $("#buy-now-btn").addEventListener("click", () => {
+    addItem(product, getQty());
+    window.location.href = "cart.html";
   });
-  renderImageThumbs();
 
-  if (failed) {
-    statusEl.className = "upload-status is-error";
-    statusEl.textContent = `${failed} foto${failed > 1 ? "s" : ""} falharam ao enviar. Tente novamente.`;
-  } else {
-    statusEl.textContent = "Fotos enviadas com sucesso.";
-    setTimeout(() => (statusEl.textContent = ""), 2500);
-  }
-  e.target.value = "";
-}
+  $("#whatsapp-btn").href = `https://wa.me/${toWhatsAppNumber(settings.whatsapp)}?text=${encodeURIComponent(
+    `Olá! Tenho interesse no produto "${product.name}" (${window.location.href})`
+  )}`;
 
-function readForm() {
-  return {
-    name: $("#pf-name").value.trim(),
-    shortDescription: $("#pf-short-desc").value.trim(),
-    description: $("#pf-description").value.trim(),
-    categoryId: $("#pf-category").value,
-    sku: $("#pf-sku").value.trim(),
-    price: parseFloat($("#pf-price").value) || 0,
-    promoPrice: $("#pf-promo-price").value ? parseFloat($("#pf-promo-price").value) : null,
-    stock: parseInt($("#pf-stock").value, 10) || 0,
-    weight: $("#pf-weight").value ? parseFloat($("#pf-weight").value) : null,
-    dimensions: $("#pf-dimensions").value.trim(),
-    video: $("#pf-video").value.trim() || null,
-    images: currentImages,
-    active: $("#pf-active").checked,
-    featured: $("#pf-featured").checked,
-    bestSeller: $("#pf-bestseller").checked,
-    isNew: $("#pf-new").checked,
-  };
-}
-
-async function handleSubmit(e) {
-  e.preventDefault();
-  const id = $("#pf-id").value;
-  const data = readForm();
-
-  if (id) {
-    await updateProduct(id, data);
-    showToast("Produto atualizado.");
-  } else {
-    await createProduct(data);
-    showToast("Produto cadastrado.");
-  }
-
-  closeSlideover();
-  await loadData();
-  renderTable();
-}
-
-// ---------- table actions ----------
-async function handleTableClick(e) {
-  const editId = e.target.closest("[data-edit]")?.dataset.edit;
-  const dupId = e.target.closest("[data-duplicate]")?.dataset.duplicate;
-  const toggleId = e.target.closest("[data-toggle]")?.dataset.toggle;
-  const delId = e.target.closest("[data-delete]")?.dataset.delete;
-
-  if (editId) {
-    openSlideover(products.find((p) => p.id === editId));
-  } else if (dupId) {
-    await duplicateProduct(dupId);
-    showToast("Produto duplicado.");
-    await loadData();
-    renderTable();
-  } else if (toggleId) {
-    const product = products.find((p) => p.id === toggleId);
-    await updateProduct(toggleId, { active: product.active === false });
-    showToast(product.active === false ? "Produto ativado." : "Produto desativado.");
-    await loadData();
-    renderTable();
-  } else if (delId) {
-    if (!confirm("Excluir este produto? Essa ação não pode ser desfeita.")) return;
-    await deleteProduct(delId);
-    showToast("Produto excluído.");
-    await loadData();
-    renderTable();
-  }
+  $("#share-btn").addEventListener("click", async () => {
+    const shareData = { title: product.name, url: window.location.href };
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch {
+        /* usuário cancelou */
+      }
+    } else {
+      await navigator.clipboard.writeText(window.location.href);
+      const btn = $("#share-btn");
+      const original = btn.textContent;
+      btn.textContent = "✓";
+      setTimeout(() => (btn.textContent = original), 1200);
+    }
+  });
 }
 
 async function init() {
-  await initAdminLayout("produtos", "Produtos");
-  await loadData();
-  populateCategorySelects();
-  renderTable();
+  await initLayout();
 
-  $("#new-product-btn").addEventListener("click", () => openSlideover());
-  $("#product-form-close").addEventListener("click", closeSlideover);
-  $("#product-form-cancel").addEventListener("click", closeSlideover);
-  $("#product-backdrop").addEventListener("click", closeSlideover);
-  $("#product-form").addEventListener("submit", handleSubmit);
-  $("#pf-image-upload").addEventListener("change", handleImageUpload);
+  const id = getProductId();
+  const product = id ? await getProductById(id) : null;
 
-  $("#product-search").addEventListener("input", renderTable);
-  $("#product-category-filter").addEventListener("change", renderTable);
-  $("#product-stock-filter").addEventListener("change", renderTable);
+  if (!product) {
+    $("#product-section").innerHTML = `
+      <div class="container">
+        <p class="empty-state">Produto não encontrado. <a href="loja.html">Voltar para a loja</a>.</p>
+      </div>
+    `;
+    return;
+  }
 
-  $("#products-body").addEventListener("click", handleTableClick);
+  const [categories, related, settings] = await Promise.all([
+    getCategories(),
+    getRelatedProducts(product.categoryId, product.id),
+    getStoreSettings(),
+  ]);
+  const category = categories.find((c) => c.id === product.categoryId);
+
+  renderBreadcrumb(product, category);
+  renderGallery(product);
+  renderInfo(product, category);
+  renderReviews(product);
+  initTabs();
+  initReviewForm(product);
+  initQtyStepper(product);
+  initActions(product, settings);
+  renderProductGrid("related-grid", related, "Sem produtos relacionados no momento.");
 }
 
 init();
