@@ -3,7 +3,6 @@
 // ============================================================
 import {
   getBanners,
-  getPromoBanners,
   getCategories,
   getFeaturedProducts,
   getBestSellers,
@@ -87,55 +86,6 @@ function startHeroAutoplay(count) {
   clearInterval(heroTimer);
   if (count <= 1) return;
   heroTimer = setInterval(() => goToHero(heroIndex + 1), 6000);
-}
-
-// ---------- promo strip ----------
-let promoTimer = null;
-
-function renderPromoStrip(promos) {
-  const track = $("#promo-track");
-  const dotsWrap = $("#promo-dots");
-  track.innerHTML = "";
-  dotsWrap.innerHTML = "";
-
-  if (!promos.length) return;
-
-  promos.forEach((p) => {
-    track.appendChild(
-      el(`
-        <a class="promo-card" href="${p.link || "#"}" style="background-image:url('${p.image}')">
-          ${p.title ? `<span class="promo-card__label">${p.title}</span>` : ""}
-        </a>
-      `)
-    );
-  });
-
-  promos.forEach((_, i) => {
-    dotsWrap.appendChild(el(`<button class="promo-dot" data-i="${i}" aria-label="Banner ${i + 1}"></button>`));
-  });
-
-  const syncActiveDot = () => {
-    const index = Math.round(track.scrollLeft / track.clientWidth);
-    $$(".promo-dot").forEach((d, i) => d.classList.toggle("is-active", i === index));
-  };
-  syncActiveDot();
-
-  $$(".promo-dot").forEach((dot) => {
-    dot.addEventListener("click", () => {
-      track.scrollTo({ left: track.clientWidth * Number(dot.dataset.i), behavior: "smooth" });
-    });
-  });
-
-  track.addEventListener("scroll", debounce(syncActiveDot, 100));
-
-  // avança sozinho a cada 5s, só se houver mais de um banner
-  clearInterval(promoTimer);
-  if (promos.length > 1) {
-    promoTimer = setInterval(() => {
-      const next = (Math.round(track.scrollLeft / track.clientWidth) + 1) % promos.length;
-      track.scrollTo({ left: track.clientWidth * next, behavior: "smooth" });
-    }, 5000);
-  }
 }
 
 function debounce(fn, wait) {
@@ -292,10 +242,9 @@ async function init() {
   renderSkeletonGrid("bestsellers-grid", 4);
   renderSkeletonGrid("new-grid", 4);
 
-  const [banners, promos, categories, featured, bestSellers, newProducts, testimonials, settings] =
+  const [banners, categories, featured, bestSellers, newProducts, testimonials, settings] =
     await Promise.all([
       getBanners(),
-      getPromoBanners(),
       getCategories(),
       getFeaturedProducts(),
       getBestSellers(),
@@ -305,7 +254,6 @@ async function init() {
     ]);
 
   renderHero(banners);
-  renderPromoStrip(promos);
   renderCategories(categories);
   renderProductGrid("featured-grid", featured, "Em breve novidades por aqui.");
   renderProductGrid("bestsellers-grid", bestSellers, "Em breve novidades por aqui.");
