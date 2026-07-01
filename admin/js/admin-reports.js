@@ -97,7 +97,12 @@ function renderReport() {
   $("#report-head").innerHTML = `<tr>${currentReport.columns.map((c) => `<th>${c}</th>`).join("")}</tr>`;
   $("#report-body").innerHTML = currentReport.rows.length
     ? currentReport.rows
-        .map((row) => `<tr>${row.map((cell) => `<td>${cell}</td>`).join("")}</tr>`)
+        .map(
+          (row) =>
+            `<tr>${row
+              .map((cell, i) => `<td data-label="${currentReport.columns[i]}">${cell}</td>`)
+              .join("")}</tr>`
+        )
         .join("")
     : `<tr><td colspan="${currentReport.columns.length}" class="empty-state">Sem dados para este relatório.</td></tr>`;
 }
