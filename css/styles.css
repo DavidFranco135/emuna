@@ -508,7 +508,19 @@ ul { list-style: none; }
    Product grids
    ============================================================ */
 .product-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+@media (min-width: 640px) { .product-row { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1000px) { .product-row { grid-template-columns: repeat(4, 1fr); } }
+
+/* Vitrines da Home (Destaques, Mais vendidos, Novidades, Categorias):
+   viram carrossel horizontal arrastável em vez de grade. A Loja/Catálogo
+   continua em grade normal (.product-row sozinho, sem esta classe). */
+.product-row.is-carousel {
   display: flex;
+  grid-template-columns: none;
   gap: 20px;
   overflow-x: auto;
   scroll-snap-type: x proximity;
@@ -518,18 +530,19 @@ ul { list-style: none; }
   scrollbar-width: thin;
   scrollbar-color: var(--gray-line) transparent;
 }
-.product-row::-webkit-scrollbar { height: 6px; }
-.product-row::-webkit-scrollbar-thumb { background: var(--gray-line); border-radius: 999px; }
-.product-row.drag-scroll { cursor: grab; }
-.product-row.drag-scroll.is-dragging { cursor: grabbing; scroll-snap-type: none; }
+.product-row.is-carousel::-webkit-scrollbar { height: 6px; }
+.product-row.is-carousel::-webkit-scrollbar-thumb { background: var(--gray-line); border-radius: 999px; }
+.product-row.is-carousel.drag-scroll { cursor: grab; }
+.product-row.is-carousel.drag-scroll.is-dragging { cursor: grabbing; scroll-snap-type: none; }
 
-.product-row .product-card {
+.product-row.is-carousel .product-card {
   flex: 0 0 auto;
   width: clamp(170px, 42vw, 240px);
   scroll-snap-align: start;
 }
-@media (min-width: 640px) { .product-row .product-card { width: 220px; } }
-@media (min-width: 1000px) { .product-row .product-card { width: 250px; } }
+
+@media (min-width: 640px) { .product-row.is-carousel .product-card { width: 220px; } }
+@media (min-width: 1000px) { .product-row.is-carousel .product-card { width: 250px; } }
 
 .product-card {
   background: var(--white);
