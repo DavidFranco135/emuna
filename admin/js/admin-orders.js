@@ -50,13 +50,13 @@ function renderTable() {
     .map(
       (o) => `
       <tr data-id="${o.id}">
-        <td>#${o.id}</td>
-        <td>${new Date(o.createdAt).toLocaleDateString("pt-BR")}</td>
-        <td>${o.customerName}</td>
-        <td>${PAYMENT_LABELS[o.payment] || o.payment}</td>
-        <td>${formatBRL(o.total)}</td>
-        <td><span class="badge badge--${STATUS_BADGE[o.status] || "gray"}">${STATUS_LABELS[o.status] || o.status}</span></td>
-        <td><button class="btn btn--ghost btn--sm" data-view="${o.id}">Ver pedido</button></td>
+        <td data-label="Pedido">#${o.id}</td>
+        <td data-label="Data">${new Date(o.createdAt).toLocaleDateString("pt-BR")}</td>
+        <td data-label="Cliente">${o.customerName}</td>
+        <td data-label="Pagamento">${PAYMENT_LABELS[o.payment] || o.payment}</td>
+        <td data-label="Total">${formatBRL(o.total)}</td>
+        <td data-label="Status"><span class="badge badge--${STATUS_BADGE[o.status] || "gray"}">${STATUS_LABELS[o.status] || o.status}</span></td>
+        <td class="cell-actions"><button class="btn btn--ghost btn--sm" data-view="${o.id}">Ver pedido</button></td>
       </tr>
     `
     )
