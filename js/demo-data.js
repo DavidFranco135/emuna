@@ -423,6 +423,7 @@ export const demoCustomerFlags = {};
 export const demoSettings = {
   storeName: "Emuná",
   whatsapp: "5521999999999",
+  pixKey: "",
   instagram: "https://instagram.com/emuna",
   facebook: "https://facebook.com/emuna",
   email: "contato@emuna.com.br",
