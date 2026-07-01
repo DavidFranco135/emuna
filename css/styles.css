@@ -452,6 +452,23 @@ ul { list-style: none; }
   padding: 18px 22px;
 }
 
+/* No celular: 2 colunas menores lado a lado, em vez de 1 coluna alta.
+   !important garante que isso nunca vire uma imagem de tela cheia,
+   independente de qualquer outra regra. */
+@media (max-width: 640px) {
+  .promo-track {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+  .promo-card {
+    height: 130px !important;
+  }
+  .promo-card__label {
+    font-size: 14px !important;
+    padding: 12px 14px !important;
+  }
+}
+
 /* ============================================================
    Categories
    ============================================================ */
