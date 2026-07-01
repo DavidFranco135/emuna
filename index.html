@@ -121,6 +121,34 @@
         <h2>Depoimentos</h2>
       </div>
       <div class="testimonials-track" id="testimonials-track"></div>
+
+      <div class="testimonial-cta" id="testimonial-cta">
+        <button class="btn btn--ghost" id="open-testimonial-form-btn">+ Deixar meu depoimento</button>
+      </div>
+
+      <form class="testimonial-form" id="testimonial-form" hidden>
+        <h3>Conte como foi sua experiência</h3>
+        <label class="field">Seu nome
+          <input type="text" id="tf-pub-name" required />
+        </label>
+        <label class="field">Sua nota
+          <div class="testimonial-form__stars" id="tf-pub-stars">
+            <button type="button" data-star="1">★</button>
+            <button type="button" data-star="2">★</button>
+            <button type="button" data-star="3">★</button>
+            <button type="button" data-star="4">★</button>
+            <button type="button" data-star="5">★</button>
+          </div>
+        </label>
+        <label class="field">Seu depoimento
+          <textarea id="tf-pub-text" required></textarea>
+        </label>
+        <div class="testimonial-form__actions">
+          <button type="submit" class="btn btn--primary">Enviar depoimento</button>
+          <button type="button" class="btn btn--ghost" id="cancel-testimonial-form-btn">Cancelar</button>
+        </div>
+        <p class="testimonial-form__msg" id="testimonial-form-msg"></p>
+      </form>
     </div>
   </section>
 
