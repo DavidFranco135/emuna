@@ -78,14 +78,14 @@ function renderTable() {
 
       return `
         <tr data-id="${p.id}">
-          <td><img class="table-thumb" src="${p.images?.[0] || ""}" alt="" /></td>
-          <td>${p.name}</td>
-          <td>${p.sku || "—"}</td>
-          <td>${categoryName(p.categoryId)}</td>
-          <td>${p.promoPrice ? `<s style="opacity:.5">${formatBRL(p.price)}</s> ${formatBRL(p.promoPrice)}` : formatBRL(p.price)}</td>
-          <td>${p.stock} ${stockBadge}</td>
-          <td>${badges || "—"}</td>
-          <td>
+          <td class="cell-thumb"><img class="table-thumb" src="${p.images?.[0] || ""}" alt="" /></td>
+          <td data-label="Produto">${p.name}</td>
+          <td data-label="SKU">${p.sku || "—"}</td>
+          <td data-label="Categoria">${categoryName(p.categoryId)}</td>
+          <td data-label="Preço">${p.promoPrice ? `<s style="opacity:.5">${formatBRL(p.price)}</s> ${formatBRL(p.promoPrice)}` : formatBRL(p.price)}</td>
+          <td data-label="Estoque">${p.stock} ${stockBadge}</td>
+          <td data-label="Status">${badges || "—"}</td>
+          <td class="cell-actions">
             <div class="table-actions">
               <button class="btn btn--ghost btn--sm" data-edit="${p.id}">Editar</button>
               <button class="btn btn--ghost btn--sm" data-duplicate="${p.id}">Duplicar</button>
