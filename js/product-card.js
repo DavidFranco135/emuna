@@ -3,11 +3,37 @@
 // ============================================================
 import { addItem, formatBRL } from "./cart.js";
 import { isFavorite, toggleFavorite } from "./favorites.js";
+import { revealOnScroll } from "./scroll-reveal.js";
 
 function el(html) {
   const t = document.createElement("template");
   t.innerHTML = html.trim();
   return t.content.firstElementChild;
+}
+
+/** Mostra cartões "esqueleto" (com brilho animado) enquanto os produtos
+ * de verdade ainda estão sendo buscados — dá sensação de carregamento
+ * rápido em vez de uma área vazia parada. */
+export function renderSkeletonGrid(containerId, count = 4) {
+  const wrap = document.getElementById(containerId);
+  if (!wrap) return;
+  wrap.innerHTML = Array.from({ length: count })
+    .map(
+      () => `
+      <div class="product-card skeleton-card">
+        <div class="product-card__media skeleton-card__media">
+          <div class="skeleton-block skeleton-block--media"></div>
+        </div>
+        <div class="skeleton-card__body">
+          <div class="skeleton-block skeleton-block--title"></div>
+          <div class="skeleton-block skeleton-block--text"></div>
+          <div class="skeleton-block skeleton-block--price"></div>
+          <div class="skeleton-block skeleton-block--btn"></div>
+        </div>
+      </div>
+    `
+    )
+    .join("");
 }
 
 export function productCard(p) {
@@ -52,6 +78,7 @@ export function renderProductGrid(containerId, products, emptyMessage = "Nenhum 
     return;
   }
   products.forEach((p) => wrap.appendChild(productCard(p)));
+  revealOnScroll(".product-card", wrap);
   wrap.addEventListener("click", (e) => {
     const addBtn = e.target.closest("[data-add]");
     if (addBtn) {
@@ -66,6 +93,10 @@ export function renderProductGrid(containerId, products, emptyMessage = "Nenhum 
       const isFav = toggleFavorite(favBtn.dataset.fav);
       favBtn.textContent = isFav ? "♥" : "♡";
       favBtn.classList.toggle("is-active", isFav);
+      favBtn.classList.remove("is-pulsing");
+      // força o navegador a "esquecer" a animação anterior antes de tocar de novo
+      void favBtn.offsetWidth;
+      favBtn.classList.add("is-pulsing");
     }
   });
 }
