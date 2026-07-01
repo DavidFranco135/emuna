@@ -90,18 +90,60 @@ function startHeroAutoplay(count) {
 }
 
 // ---------- promo strip ----------
+let promoTimer = null;
+
 function renderPromoStrip(promos) {
   const track = $("#promo-track");
+  const dotsWrap = $("#promo-dots");
   track.innerHTML = "";
+  dotsWrap.innerHTML = "";
+
+  if (!promos.length) return;
+
   promos.forEach((p) => {
     track.appendChild(
       el(`
         <a class="promo-card" href="${p.link || "#"}" style="background-image:url('${p.image}')">
-          <span class="promo-card__label">${p.title}</span>
+          ${p.title ? `<span class="promo-card__label">${p.title}</span>` : ""}
         </a>
       `)
     );
   });
+
+  promos.forEach((_, i) => {
+    dotsWrap.appendChild(el(`<button class="promo-dot" data-i="${i}" aria-label="Banner ${i + 1}"></button>`));
+  });
+
+  const syncActiveDot = () => {
+    const index = Math.round(track.scrollLeft / track.clientWidth);
+    $$(".promo-dot").forEach((d, i) => d.classList.toggle("is-active", i === index));
+  };
+  syncActiveDot();
+
+  $$(".promo-dot").forEach((dot) => {
+    dot.addEventListener("click", () => {
+      track.scrollTo({ left: track.clientWidth * Number(dot.dataset.i), behavior: "smooth" });
+    });
+  });
+
+  track.addEventListener("scroll", debounce(syncActiveDot, 100));
+
+  // avança sozinho a cada 5s, só se houver mais de um banner
+  clearInterval(promoTimer);
+  if (promos.length > 1) {
+    promoTimer = setInterval(() => {
+      const next = (Math.round(track.scrollLeft / track.clientWidth) + 1) % promos.length;
+      track.scrollTo({ left: track.clientWidth * next, behavior: "smooth" });
+    }, 5000);
+  }
+}
+
+function debounce(fn, wait) {
+  let t;
+  return (...args) => {
+    clearTimeout(t);
+    t = setTimeout(() => fn(...args), wait);
+  };
 }
 
 // ---------- categories ----------
