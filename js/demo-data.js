@@ -340,6 +340,7 @@ export const demoTestimonials = [
     name: "Marina Costa",
     text: "Cada peça chega com um cuidado que eu nunca tinha visto em outra loja. A bolsa de crochê é ainda mais linda pessoalmente.",
     rating: 5,
+    approved: true,
   },
   {
     id: "t2",
