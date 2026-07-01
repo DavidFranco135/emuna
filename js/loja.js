@@ -37,6 +37,7 @@ function currentFilters() {
     maxPrice: parseFloat($("#price-max").value) || null,
     inStockOnly: $("#filter-instock").checked,
     promoOnly: $("#filter-promo").checked,
+    featuredOnly: getParams().get("destaque") === "1",
     sort: $("#sort-select").value,
     q: getParams().get("q") || "",
   };
@@ -60,6 +61,9 @@ function applyFilters() {
   }
   if (f.promoOnly) {
     result = result.filter((p) => !!p.promoPrice);
+  }
+  if (f.featuredOnly) {
+    result = result.filter((p) => !!p.featured);
   }
   if (f.q) {
     const needle = f.q.toLowerCase();
@@ -119,12 +123,16 @@ function applyTitleFromParams() {
   const params = getParams();
   const q = params.get("q");
   const categoryId = params.get("categoria");
+  const destaque = params.get("destaque") === "1";
   if (q) {
     $("#shop-title").textContent = `Resultados para "${q}"`;
     $("#shop-subtitle").textContent = "";
   } else if (categoryId) {
     const cat = categories.find((c) => c.id === categoryId);
     $("#shop-title").textContent = cat ? cat.name : "Loja";
+  } else if (destaque) {
+    $("#shop-title").textContent = "Destaques";
+    $("#shop-subtitle").textContent = "Selecionados a dedo pra você.";
   } else {
     $("#shop-title").textContent = "Loja";
     $("#shop-subtitle").textContent = "Todas as peças Emuná, em um só lugar.";
