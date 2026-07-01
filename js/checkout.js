@@ -4,7 +4,7 @@
 import { getCart, getCartTotal, formatBRL, clearCart } from "./cart.js";
 import { initLayout } from "./layout.js";
 import { onCustomerAuthChange, getMyProfile } from "./customer-auth.js";
-import { createOrder } from "./firestore-service.js";
+import { createOrder, getStoreSettings } from "./firestore-service.js";
 
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 
@@ -54,6 +54,36 @@ function renderOrderSummary() {
   return true;
 }
 
+const PAYMENT_LABELS = { pix: "Pix", cartao: "Cartão de crédito", boleto: "Boleto" };
+
+function showPaymentInstructions({ orderId, payment, total, settings }) {
+  $("#success-order-id").textContent = `#${orderId}`;
+
+  const isPix = payment === "pix" && settings.pixKey;
+  $("#payment-instructions-pix").hidden = !isPix;
+  $("#payment-instructions-other").hidden = isPix;
+
+  if (isPix) {
+    $("#pix-key-value").textContent = settings.pixKey;
+    $("#copy-pix-btn").onclick = async () => {
+      await navigator.clipboard.writeText(settings.pixKey);
+      const btn = $("#copy-pix-btn");
+      const original = btn.textContent;
+      btn.textContent = "Copiado ✓";
+      setTimeout(() => (btn.textContent = original), 1800);
+    };
+  } else {
+    $("#payment-method-label").textContent = PAYMENT_LABELS[payment] || payment;
+  }
+
+  const message = `Olá! Acabei de fazer o pedido #${orderId} (${PAYMENT_LABELS[payment] || payment}, ${formatBRL(
+    total
+  )}) e quero confirmar o pagamento.`;
+  $("#whatsapp-confirm-btn").href = settings.whatsapp
+    ? `https://wa.me/${settings.whatsapp}?text=${encodeURIComponent(message)}`
+    : "#";
+}
+
 function initForm() {
   $("#checkout-form").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -63,26 +93,30 @@ function initForm() {
 
     const items = getCart().map((i) => ({ name: i.name, qty: i.qty, price: i.price }));
     const payment = document.querySelector('input[name="payment"]:checked')?.value || "pix";
+    const total = getCartTotal();
 
-    const orderId = await createOrder({
-      customerName: $("#ck-name").value.trim(),
-      customerEmail: $("#ck-email").value.trim(),
-      customerPhone: $("#ck-phone").value.trim(),
-      address: {
-        cep: $("#ck-cep").value.trim(),
-        city: $("#ck-city").value.trim(),
-        state: $("#ck-state").value.trim(),
-        street: $("#ck-address").value.trim(),
-        number: $("#ck-number").value.trim(),
-        complement: $("#ck-complement").value.trim(),
-      },
-      items,
-      total: getCartTotal(),
-      payment,
-      trackingCode: "",
-    });
+    const [orderId, settings] = await Promise.all([
+      createOrder({
+        customerName: $("#ck-name").value.trim(),
+        customerEmail: $("#ck-email").value.trim(),
+        customerPhone: $("#ck-phone").value.trim(),
+        address: {
+          cep: $("#ck-cep").value.trim(),
+          city: $("#ck-city").value.trim(),
+          state: $("#ck-state").value.trim(),
+          street: $("#ck-address").value.trim(),
+          number: $("#ck-number").value.trim(),
+          complement: $("#ck-complement").value.trim(),
+        },
+        items,
+        total,
+        payment,
+        trackingCode: "",
+      }),
+      getStoreSettings(),
+    ]);
 
-    $("#success-order-id").textContent = `#${orderId}`;
+    showPaymentInstructions({ orderId, payment, total, settings });
     $("#checkout-layout").hidden = true;
     $("#checkout-success").hidden = false;
     clearCart();
