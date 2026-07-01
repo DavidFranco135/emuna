@@ -46,10 +46,10 @@ function renderRecentOrders(orders) {
     .map(
       (o) => `
       <tr>
-        <td>#${o.id}</td>
-        <td>${o.customerName}</td>
-        <td>${formatBRL(o.total)}</td>
-        <td><span class="badge badge--${STATUS_BADGE[o.status] || "gray"}">${STATUS_LABELS[o.status] || o.status}</span></td>
+        <td data-label="Pedido">#${o.id}</td>
+        <td data-label="Cliente">${o.customerName}</td>
+        <td data-label="Total">${formatBRL(o.total)}</td>
+        <td data-label="Status"><span class="badge badge--${STATUS_BADGE[o.status] || "gray"}">${STATUS_LABELS[o.status] || o.status}</span></td>
       </tr>
     `
     )
