@@ -1,107 +1,130 @@
-// ============================================================
-// EMUNÁ ADMIN · Configurações
-// ============================================================
-import { initAdminLayout } from "./admin-layout.js";
-import { showToast } from "./admin-toast.js";
-import { getStoreSettings, saveStoreSettings } from "../../js/firestore-service.js";
-import { uploadImageToImgBB } from "../../js/imgbb-upload.js";
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Configurações — Painel Emuná</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+<div class="admin-shell">
+  <div id="sidebar-placeholder"></div>
 
-const $ = (sel, ctx = document) => ctx.querySelector(sel);
+  <main class="admin-main">
+    <div class="panel" style="background:var(--lilac)">
+      <p style="font-size:13px;color:var(--violet-deep)">
+        💡 Banners e slides do topo da Home ficam em <a href="banners.html" style="font-weight:700;text-decoration:underline">Página Inicial</a>.
+        Produtos, categorias, depoimentos e cupons têm suas próprias páginas no menu lateral. Aqui em Configurações ficam os dados da loja e o texto da seção "Sobre".
+      </p>
+    </div>
+    <form id="settings-form">
 
-let currentAboutImage = "";
+      <div class="panel">
+        <div class="panel__header"><h2>Identidade da loja</h2></div>
+        <div class="form-grid">
+          <label class="field">Nome da loja
+            <input type="text" id="st-store-name" required />
+          </label>
+          <label class="field">E-mail de contato
+            <input type="email" id="st-email" required />
+          </label>
+          <label class="field">Telefone
+            <input type="text" id="st-phone" />
+          </label>
+          <label class="field">WhatsApp (com DDI, só números)
+            <input type="text" id="st-whatsapp" placeholder="5521999999999" />
+          </label>
+          <label class="field">Chave Pix
+            <input type="text" id="st-pix-key" placeholder="CPF, e-mail, telefone ou chave aleatória" />
+          </label>
+          <label class="field field--wide">Endereço
+            <input type="text" id="st-address" />
+          </label>
+          <label class="field">URL do logo
+            <input type="url" id="st-logo" placeholder="https://…" />
+          </label>
+          <label class="field">URL do favicon
+            <input type="url" id="st-favicon" placeholder="https://…" />
+          </label>
+        </div>
+      </div>
 
-function renderAboutImageThumb() {
-  const wrap = $("#st-about-image-thumb");
-  wrap.innerHTML = currentAboutImage
-    ? `<div class="image-thumb"><img src="${currentAboutImage}" alt="" /><button type="button" aria-label="Remover">×</button></div>`
-    : "";
-  wrap.querySelector("button")?.addEventListener("click", () => {
-    currentAboutImage = "";
-    renderAboutImageThumb();
-  });
-}
+      <div class="panel">
+        <div class="panel__header"><h2>Redes sociais</h2></div>
+        <div class="form-grid">
+          <label class="field">Instagram
+            <input type="url" id="st-instagram" placeholder="https://instagram.com/…" />
+          </label>
+          <label class="field">Facebook
+            <input type="url" id="st-facebook" placeholder="https://facebook.com/…" />
+          </label>
+        </div>
+      </div>
 
-async function handleAboutImageUpload(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const statusEl = $("#st-about-upload-status");
-  statusEl.className = "upload-status";
-  statusEl.textContent = "Enviando foto…";
-  try {
-    currentAboutImage = await uploadImageToImgBB(file);
-    renderAboutImageThumb();
-    statusEl.textContent = "Foto enviada com sucesso.";
-    setTimeout(() => (statusEl.textContent = ""), 2500);
-  } catch (err) {
-    statusEl.className = "upload-status is-error";
-    statusEl.textContent = err.message;
-  }
-  e.target.value = "";
-}
+      <div class="panel">
+        <div class="panel__header"><h2>Conteúdo da Home — Seção "Sobre"</h2></div>
+        <div class="form-grid">
+          <label class="field">Texto pequeno (eyebrow)
+            <input type="text" id="st-about-eyebrow" placeholder="Nossa história" />
+          </label>
+          <label class="field field--wide">Título
+            <input type="text" id="st-about-title" />
+          </label>
+          <label class="field field--wide">Texto (um parágrafo por linha)
+            <textarea id="st-about-text" rows="5"></textarea>
+          </label>
+          <div class="field field--wide">
+            <span>Foto da seção</span>
+            <div class="image-thumb-list" id="st-about-image-thumb"></div>
+            <label class="btn btn--ghost btn--sm upload-label">
+              📷 Enviar foto
+              <input type="file" id="st-about-image-upload" accept="image/*" hidden />
+            </label>
+            <p class="upload-status" id="st-about-upload-status"></p>
+          </div>
+        </div>
+      </div>
 
-function fillForm(s) {
-  $("#st-store-name").value = s.storeName || "";
-  $("#st-email").value = s.email || "";
-  $("#st-phone").value = s.phone || "";
-  $("#st-whatsapp").value = s.whatsapp || "";
-  $("#st-pix-key").value = s.pixKey || "";
-  $("#st-address").value = s.address || "";
-  $("#st-logo").value = s.logo || "";
-  $("#st-favicon").value = s.favicon || "";
-  $("#st-instagram").value = s.instagram || "";
-  $("#st-facebook").value = s.facebook || "";
-  $("#st-about-eyebrow").value = s.aboutEyebrow || "";
-  $("#st-about-title").value = s.aboutTitle || "";
-  $("#st-about-text").value = s.aboutText || "";
-  currentAboutImage = s.aboutImage || "";
-  renderAboutImageThumb();
-  $("#st-seo-title").value = s.seoTitle || "";
-  $("#st-seo-desc").value = s.seoDescription || "";
-  $("#st-ga").value = s.googleAnalytics || "";
-  $("#st-gtm").value = s.googleTagManager || "";
-  $("#st-pixel").value = s.metaPixel || "";
-  $("#st-privacy").value = s.privacyPolicyText || "";
-  $("#st-returns").value = s.returnsPolicyText || "";
-}
+      <div class="panel">
+        <div class="panel__header"><h2>SEO &amp; integrações</h2></div>
+        <div class="form-grid">
+          <label class="field field--wide">Título SEO (meta title padrão)
+            <input type="text" id="st-seo-title" />
+          </label>
+          <label class="field field--wide">Descrição SEO (meta description padrão)
+            <textarea id="st-seo-desc"></textarea>
+          </label>
+          <label class="field">Google Analytics (ID)
+            <input type="text" id="st-ga" placeholder="G-XXXXXXXXXX" />
+          </label>
+          <label class="field">Google Tag Manager (ID)
+            <input type="text" id="st-gtm" placeholder="GTM-XXXXXXX" />
+          </label>
+          <label class="field">Meta Pixel (ID)
+            <input type="text" id="st-pixel" placeholder="000000000000000" />
+          </label>
+        </div>
+      </div>
 
-function readForm() {
-  return {
-    storeName: $("#st-store-name").value.trim(),
-    email: $("#st-email").value.trim(),
-    phone: $("#st-phone").value.trim(),
-    whatsapp: $("#st-whatsapp").value.trim(),
-    pixKey: $("#st-pix-key").value.trim(),
-    address: $("#st-address").value.trim(),
-    logo: $("#st-logo").value.trim(),
-    favicon: $("#st-favicon").value.trim(),
-    instagram: $("#st-instagram").value.trim(),
-    facebook: $("#st-facebook").value.trim(),
-    aboutEyebrow: $("#st-about-eyebrow").value.trim(),
-    aboutTitle: $("#st-about-title").value.trim(),
-    aboutText: $("#st-about-text").value.trim(),
-    aboutImage: currentAboutImage,
-    seoTitle: $("#st-seo-title").value.trim(),
-    seoDescription: $("#st-seo-desc").value.trim(),
-    googleAnalytics: $("#st-ga").value.trim(),
-    googleTagManager: $("#st-gtm").value.trim(),
-    metaPixel: $("#st-pixel").value.trim(),
-    privacyPolicyText: $("#st-privacy").value.trim(),
-    returnsPolicyText: $("#st-returns").value.trim(),
-  };
-}
+      <div class="panel">
+        <div class="panel__header"><h2>Políticas</h2></div>
+        <div class="form-grid">
+          <label class="field field--wide">Política de privacidade (texto)
+            <textarea id="st-privacy" placeholder="Editado em /politica-privacidade.html — campo de referência"></textarea>
+          </label>
+          <label class="field field--wide">Trocas e devoluções (texto)
+            <textarea id="st-returns" placeholder="Editado em /trocas.html — campo de referência"></textarea>
+          </label>
+        </div>
+      </div>
 
-async function init() {
-  await initAdminLayout("configuracoes", "Configurações");
-  const settings = await getStoreSettings();
-  fillForm(settings);
+      <button type="submit" class="btn btn--primary">Salvar configurações</button>
+    </form>
+  </main>
+</div>
 
-  $("#settings-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    await saveStoreSettings(readForm());
-    showToast("Configurações salvas.");
-  });
-
-  $("#st-about-image-upload").addEventListener("change", handleAboutImageUpload);
-}
-
-init();
+<script type="module" src="js/admin-settings.js"></script>
+</body>
+</html>
