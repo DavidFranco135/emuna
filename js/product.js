@@ -6,6 +6,7 @@ import {
   getRelatedProducts,
   getCategories,
   getStoreSettings,
+  addProductReview,
 } from "./firestore-service.js";
 import { addItem, formatBRL } from "./cart.js";
 import { isFavorite, toggleFavorite } from "./favorites.js";
@@ -162,18 +163,25 @@ function initReviewForm(product) {
   });
   stars.forEach((b) => b.classList.toggle("is-active", Number(b.dataset.star) <= selectedStar));
 
-  $("#review-form").addEventListener("submit", (e) => {
+  $("#review-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const name = $("#review-name").value.trim();
     const text = $("#review-text").value.trim();
     if (!name || !text) return;
 
-    product.reviews = product.reviews || [];
-    product.reviews.unshift({ name, rating: selectedStar, text, date: new Date().toISOString() });
+    const submitBtn = $("#review-form button[type=submit]");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Enviando…";
+
+    const review = { name, rating: selectedStar, text, date: new Date().toISOString() };
+    await addProductReview(product.id, review);
+
+    product.reviews = [review, ...(product.reviews || [])];
     renderReviews(product);
     $("#review-form").reset();
-    $("#review-form-msg").textContent =
-      "Obrigada pela avaliação! (exibida aqui nesta sessão — quando o Firestore estiver conectado, ela será salva de verdade)";
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Enviar avaliação";
+    $("#review-form-msg").textContent = "Obrigada pela avaliação!";
     setTimeout(() => ($("#review-form-msg").textContent = ""), 5000);
   });
 }
